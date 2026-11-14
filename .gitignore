@@ -5,3 +5,6 @@ tests/
 *.test.cjs
 *.test.mjs
 maintenance/
+/ARCHITECTURE.md
+.env
+.env.*

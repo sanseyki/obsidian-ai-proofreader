@@ -1,74 +1,50 @@
-# 智能校对助手 (Obsidian AI-Proofreader)
+# 智能校对助手 · Obsidian AI Proofreader
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+智能校对助手是一款 Obsidian 中文 Markdown 校对插件。所有插件功能均可免费使用，无须激活。AI 服务按所选服务商的规则计费。
 
-Obsidian 中文校对插件，通过 DeepSeek AI 引擎检测文档中的**错别字**、**语法错误**、**标点符号问题**，支持**一键修复**与**实时偏移刷新**。
+## 功能介绍
 
-## 2026-10-15 更新
+| 检测模式 | 检查内容 |
+| --- | --- |
+| 快速模式 | 错别字、“的、地、得”误用、常见固定词组和成语用字错误 |
+| 标准模式 | 在快速模式的基础上检查标点和明显的语法错误 |
+| 深度优化 | 在标准模式的基础上提供措辞和表达优化建议 |
 
-- 多标签页检测与当前文档绑定，切换文件时侧栏重置，旧请求不会覆盖新文档结果。
-- “当前文档”使用适配明暗主题的圆角卡片，仅显示文件名；长文件名省略，悬停查看完整名称。
-- AI 使用原文短语与修正建议的 JSON 协议，位置由插件本地校验；不要求模型计算字符下标。
-- 空占位记录、格式错误或无法安全定位的结果会重试并明确报错，不再冒充“未发现问题”。
-- 侧栏可直接切换快速、标准、深度优化模式，自动保存；检测期间禁用切换，已有结果注明原检测模式。
-- 部分条目无效时保留能够精确定位的建议，明确显示“检测不完整”；重试反馈要求保留原文引号、标点和空格，不进行模糊替换。
-- 发布文件不包含测试脚本、测试专用导出及个人配置。模型建议仍需人工核对，不能保证不漏报或不误报。
+侧栏按类别展示原文、修改建议和理由，编辑器同步高亮。支持单条替换、批量替换当前筛选结果、忽略词和自定义词典。
 
-## 功能
+## 安装教程
 
-- 🔍 **AI 智能检测**：调用 DeepSeek API 进行出版级中文校对
-- ✍️ **三种模式**：快速模式（错别字）→ 标准模式（+标点+语法）→ 深度模式（+表达优化）
-- 📝 **固定词组词典**：内置常见错词组，支持自定义词典
-- 🎯 **一键修复**：点击按钮替换错误，后续高亮实时平移
-- 🔄 **实时偏移刷新**：编辑区任意修改后，检测结果自动跟随，无需重新检测
-- 🎨 **分类筛选**：按错别字/标点/语法分类查看结果
+1. 下载 [main.js](main.js)、[manifest.json](manifest.json) 和 [styles.css](styles.css)。在 GitHub 文件页面可使用 **Download raw file** 下载原文件。
+2. 打开 Obsidian 库所在的文件夹，将三个文件放入 `.obsidian/plugins/obsidian-aiproofreader-plugin/`。目录不存在时可手动创建。
+3. 重启 Obsidian。在 **设置 → 第三方插件** 中启用「智能校对助手」。首次使用第三方插件时，先关闭受限模式。
 
-## 安装
+[Obsidian 第三方插件说明](https://obsidian.md/help/plugin-security)
 
-1. 下载 `main.js`、`manifest.json`、`styles.css` 三个文件
-2. 放入 Obsidian vault 的 `.obsidian/plugins/obsidian-aiproofreader-plugin/` 目录
-3. 重启 Obsidian → 设置 → 第三方插件 → 启用「智能校对助手」
+## 配置要求
 
-## 配置
+插件清单要求 Obsidian 1.0.0 或更高版本。AI 校对需要网络和服务商 API Key。打开 **设置 → 智能校对助手**，填写下列项目。
 
-打开插件设置，填写：
+| 设置项 | DeepSeek 示例 |
+| --- | --- |
+| API Key | 填写你在服务商后台创建的密钥 |
+| API 端点 | `https://api.deepseek.com/v1/chat/completions` |
+| 模型名称 | `deepseek-flash` |
 
-| 配置项 | 说明 | 示例 |
-|--------|------|------|
-| **API 密钥** | DeepSeek API Key | `sk-xxxx` |
-| **API 地址** | API 端点 | `https://api.deepseek.com/v1/chat/completions` |
-| **模型名称** | 模型 ID | `deepseek-v4-flash` |
-| **检测模式** | quick / standard / deep | `standard` |
-| **最大段长** | 单次 API 调用的最大字符数 | `1500` |
+填完后点击 **测试连接**。更换 AI 服务时，请使用该服务的 HTTPS Chat Completions 端点及对应的模型 ID。插件把用于校对的文本发送到所配置的服务，密钥保存在该库的插件配置 `data.json` 中。请妥善保管配置文件。
 
-> DeepSeek API Key 可在 [platform.deepseek.com](https://platform.deepseek.com) 获取。
+[DeepSeek 密钥管理](https://platform.deepseek.com/api_keys) · [DeepSeek API 文档](https://api-docs.deepseek.com/)
 
-## 使用
+## 使用介绍
 
-1. 打开 Markdown 文件
-2. 点击左侧边栏的「拼写检查」图标（或运行命令 `中文校对：检测当前文档`）
-3. 右侧面板显示检测结果，按分类筛选
-4. 点击「替换」修复单处错误，或点击「全部修复」批量处理
-5. 编辑区修改文字后，高亮自动刷新，无需重新检测
+1. 在编辑视图中打开 Markdown 笔记。要检查部分内容，先选中文字。未选中文字时检查整篇笔记。
+2. 点击左侧「中文校对」图标打开侧栏，选择检测模式，然后点击 **开始检测**。也可以从命令面板运行 **检测当前文档**。
+3. 核对建议及上下文后，选择 **替换为…** 或 **忽略**。可先筛选分类，再点 **替换筛选结果** 批量修改。编辑后，仍能定位的建议会跟随原文更新。
+4. 如需添加固定写法，在插件设置的 **自定义固定词组** 中按 `错误词 => 正确词` 每行填写一项。对专名或常用术语，可在 **忽略词列表** 中每行填写一项。
 
-## 技术架构
+## 开源许可
 
-```
-CM6 EditorView.updateListener（文档变更）
-  ↓ iterChanges → {fromA, toA, diff}
-applyChangesToOffsets（几何平移）
-  ↓ rEnd<=fromA→不动 | rStart>=toA→+diff | 重叠→移除
-debounced renderResults（150ms）
-```
-
-- **全局 offset 基准**：零格式假设，对所有 Markdown 变体鲁棒
-- **增量平移**：按字符增减量单位移动后续偏移，不涉及 AI 重新检测
-- **restoreScroll**：替换后恢复 scrollTop，消除画面跳跃
-
-
-## 许可
-
-MIT License
+本插件采用 [MIT 协议](LICENSE)，允许使用、修改和再分发，分发时须保留版权及许可声明。
 
 ## 作者
+
 Tahacoo
